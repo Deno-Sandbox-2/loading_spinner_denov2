@@ -1,50 +1,43 @@
+import {
+  textEncoder,
+  saveCursor,
+  restoreCursor,
+  makeVisibleCursor,
+  makeInvisibleCursor,
+  ansi,
+} from "./ansi.ts";
+
 const spinCharactors = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 
-const ESC = "\x1b";
-const textEncoder = new TextEncoder();
+let spinCount = 0;
+const printSpin = () => {
+  Deno.stdout.writeSync(ansi("[1m"));
+  Deno.stdout.writeSync(ansi("[35m"));
+  Deno.stdout.writeSync(textEncoder.encode(spinCharactors[spinCount]));
+  Deno.stdout.writeSync(ansi("[0m"));
 
-const ansiEscapeSequence = (str: TemplateStringsArray) => {
-  return textEncoder.encode(`${ESC}${str}`);
-};
-let spin_count = 0;
+  spinCount++;
 
-const eraseCurrentLine = () => {
-  Deno.stdout.writeSync(ansiEscapeSequence`[2K`);
-  Deno.stdout.writeSync(ansiEscapeSequence`[0G`); //カーソルを消す
-};
-
-const saveCursor = () => {
-  Deno.stdout.writeSync(ansiEscapeSequence`[s`);
+  if (spinCount >= spinCharactors.length) spinCount = 0; //要素番号のリセット
 };
 
-const restoreCursor = () => {
-  Deno.stdout.writeSync(ansiEscapeSequence`[u`);
-};
-const spin = (message: string) => {
-  const te = new TextEncoder();
-  Deno.stdout.writeSync(te.encode("\x1B[?25l")); //カーソルを消す
-  Deno.stdout.writeSync(te.encode("\x1B[?25l")); //カーソルを消す
-  // rl.clearLine(process.stdout, 0); //行をすべて削除
-  // rl.moveCursor(process.stdout, -9999, 0); //一番左側に戻る
-  console.log(`${spinCharactors[spin_count]} ${message}`); //spin_charの配列で描画
-  spin_count++; //要素番号計算
-  spin_count >= spinCharactors.length ? (spin_count = 0) : null; //要素番号のリセット
+export const loading = (msg: string) => {
+  saveCursor();
+  makeInvisibleCursor();
+
+  printSpin();
+  Deno.stdout.writeSync(textEncoder.encode(" " + msg));
+
+  const iId = setInterval(() => {
+    restoreCursor();
+    printSpin();
+  }, 70);
+
+  return iId;
 };
 
-export const loading = (msg: string) =>
-  setInterval(() => {
-    spin(msg);
-  }, 200);
-
-export const endloading = (loading: number, msg: string) => {
-  clearInterval(loading);
-  // rl.clearLine(process.stdout, 0); // 行をすべて削除
+export const clearLoading = (intervalId: number, msg: string) => {
+  clearInterval(intervalId);
   console.log(`\n${msg}`); //end Message
-  console.log("\x1B[?25h"); //ローディングで消したカーソルを戻す
+  makeVisibleCursor();
 };
-
-for (let i = 10; i > 0; i--) {
-  Deno.sleepSync(300);
-  Deno.stdout.writeSync(`---${i}---`);
-  eraseCurrentLine();
-}
