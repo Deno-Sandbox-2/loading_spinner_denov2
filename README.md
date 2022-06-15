@@ -9,7 +9,7 @@ CLI loading animation using Deno
 import {
   loading,
   clearLoading,
-} from "https://deno.land/x/loading_spinner@v1.0.0/mod.ts";
+} from "https://deno.land/x/loading_spinner@v1.0.1/mod.ts";
 
 const loadingId = loading("loading...");
 
