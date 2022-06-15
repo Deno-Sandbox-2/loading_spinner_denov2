@@ -1,4 +1,4 @@
-# deno_spinner
+# loading_spinner
 CLI loading animation using Deno
 
 # sample
