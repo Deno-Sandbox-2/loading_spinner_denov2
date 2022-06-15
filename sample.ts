@@ -1,7 +1,10 @@
-import { loading, clearLoading } from "./main.ts";
+import {
+  loading,
+  clearLoading,
+} from "https://deno.land/x/loading_spinner@v1.0.0/mod.ts";
 
-const iId = loading("loading...");
+const loadingId = loading("loading...");
 await new Promise<void>((res, _rej) => {
-  setTimeout(() => res(), 2000);
+  setTimeout(() => res(), 3000);
 });
-clearLoading(iId, "finish");
+clearLoading(loadingId, "finish!!!");
