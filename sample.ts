@@ -1,10 +1,35 @@
 import {
   loading,
   clearLoading,
-} from "https://deno.land/x/loading_spinner@v1.0.0/mod.ts";
+  updateMessage,
+  test_pass,
+  test_fail,
+} from "./mod.ts";
 
-const loadingId = loading("loading...");
+let loadingId = loading("loading...");
+
 await new Promise<void>((res, _rej) => {
-  setTimeout(() => res(), 3000);
+  setTimeout(() => res(), 1000);
 });
-clearLoading(loadingId, "finish!!!");
+
+let k = updateMessage(loadingId, "loading... 3sec");
+
+await new Promise<void>((res, _rej) => {
+  setTimeout(() => res(), 1000);
+});
+
+clearLoading(k, "finish!!!");
+
+
+// The test zone
+loadingId = loading("test1...");
+await new Promise<void>((res, _rej) => {
+  setTimeout(() => res(), 1000);
+});
+test_pass(loadingId);
+
+loadingId = loading("test 2...");
+await new Promise<void>((res, _rej) => {
+  setTimeout(() => res(), 1000);
+});
+test_fail(loadingId);

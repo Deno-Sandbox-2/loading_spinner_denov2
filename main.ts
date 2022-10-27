@@ -36,8 +36,47 @@ export const loading = (msg: string) => {
   return iId;
 };
 
+export const updateMessage = (intervalId:number, msg: string) => {
+  clearInterval(intervalId);
+  restoreCursor();
+  //remove spin
+  Deno.stdout.writeSync(ansi("[1m"));
+  return loading(msg);
+};
+
 export const clearLoading = (intervalId: number, msg: string) => {
   clearInterval(intervalId);
   console.log(`\n${msg}`); //end Message
   makeVisibleCursor();
+};
+
+
+export const test_pass = (intervalId: number) => {
+  clearInterval(intervalId);
+
+  //remove spin
+  restoreCursor();
+  
+  // Go at the end of the line
+  Deno.stdout.writeSync(ansi("[1m"));
+  Deno.stdout.writeSync(ansi("[32m"));
+  Deno.stdout.writeSync(textEncoder.encode("✓"));
+  Deno.stdout.writeSync(ansi("[0m"));
+  makeVisibleCursor();
+  console.log()
+};
+
+export const test_fail = (intervalId: number) => {
+  clearInterval(intervalId);
+  
+  //remove spin
+  restoreCursor();
+  
+  // Go at the end of the line
+  Deno.stdout.writeSync(ansi("[1m"));
+  Deno.stdout.writeSync(ansi("[31m"));
+  Deno.stdout.writeSync(textEncoder.encode("✗"));
+  Deno.stdout.writeSync(ansi("[0m"));
+  makeVisibleCursor();
+  console.log()
 };
