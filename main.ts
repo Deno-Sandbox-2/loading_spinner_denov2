@@ -63,7 +63,7 @@ export const test_pass = (intervalId: number) => {
   Deno.stdout.writeSync(textEncoder.encode("✓"));
   Deno.stdout.writeSync(ansi("[0m"));
   makeVisibleCursor();
-  console.log()
+  console.log("")
 };
 
 export const test_fail = (intervalId: number) => {
@@ -78,5 +78,5 @@ export const test_fail = (intervalId: number) => {
   Deno.stdout.writeSync(textEncoder.encode("✗"));
   Deno.stdout.writeSync(ansi("[0m"));
   makeVisibleCursor();
-  console.log()
+  console.log("")
 };
