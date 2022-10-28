@@ -1,6 +1,8 @@
 # loading_spinner
 CLI loading animation using Deno
 
+> Based on https://github.com/takaodaze/loading_spinner_deno
+
 # Sample
 ![Videotogif](https://user-images.githubusercontent.com/42061897/173711329-a8f7371d-1f5b-4118-8e0b-7951cdf580ac.gif)
 
